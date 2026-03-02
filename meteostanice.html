@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    <title>Meteostanice</title>
+    <link rel="stylesheet" href="source/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <script src="source/script.js"></script>
+</head>
+<body class="meteostanice-page">
+    <nav>
+        <div class="nav-container">
+            <div class="logo" data-aos="zoom-in" data-aos-duration="1000" style="display: flex; align-items: center; position: relative;">
+                <span style="position: relative; z-index: 1;">Letiště Štípa</span>
+                <img src="img/logo.png" alt="Logo Štípa Letiště" style="height: 120px; position: absolute; left: 110%; top: 50%; transform: translateY(-50%); z-index: 0;">
+            </div>
+
+            <div class="links">
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100"><a href="index.html">DOMŮ</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200"><a href="letiste.html">LETIŠTĚ</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300"><a href="meteostanice.html">METEOSTANICE</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400"><a href="webkamera.html">WEBKAMERA</a></div>
+                <div class="link" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="500"><a href="galerie.html">GALERIE</a></div>
+                <div class="link contact-btn" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600"><a href="kontakt.html">KONTAKT</a></div>
+            </div>
+            <i class="fa-solid fa-bars hamburg" onclick="hamburg()"></i>
+        </div>
+        <div class="dropdown">
+            <div class="links">
+                <a href="index.html">DOMŮ</a>
+                <a href="letiste.html">LETIŠTĚ</a>
+                <a href="meteostanice.html">METEOSTANICE</a>
+                <a href="galerie.html">GALERIE</a>
+                <a href="webkamera.html">WEBKAMERA</a>
+                <a href="kontakt.html">KONTAKT</a>
+                <i class="fa-solid fa-xmark cancel" onclick="cancel()"></i>
+            </div>
+        </div>
+    </nav>
+    <section class="container">
+        <div class="main-container">
+            <div class="image" data-aos="zoom-in-right" data-aos-duration="2500">
+                <img src="https://aim.rlp.cz/vfrmanual/actual/ad/lkstip_voc.jpg" alt="Meteostanice">
+            </div>
+            <div class="content">
+                <h1 class="section-header" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="800">O letišti <span> Štípa</span></h1>
+                <div class="typewriter" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="900">Naše meteostanice vysílá čerstvá data přímo z věže.</div>
+                <p data-aos="flip-up" data-aos-duration="1000" data-aos-delay="1000">Monitorujeme teplotu, vítr, tlak i vlhkost pro bezpečný provoz. Informace se pravidelně aktualizují a lze je sdílet s piloty a veřejností prostřednictvím odkazu.</p>
+                <!-- WEATHER DATA PANEL -->
+                <div class="weather-info" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="1100">
+                    <div class="weather-row"><strong>Čas:</strong> <span id="current-time">--:--:--</span></div>
+                    <div class="weather-row"><strong>Západ slunce:</strong> <span id="sunset">--:--</span></div>
+                    <div class="weather-row"><strong>Teplota:</strong> <span id="temperature">-- °C</span></div>
+                    <div class="weather-row"><strong>Vítr:</strong> <span id="wind-speed">-- km/h</span></div>
+                    <div class="weather-row"><strong>Náraz:</strong> <span id="wind-gust">-- km/h</span></div>
+                    <div class="weather-row"><strong>Směr větru:</strong> <span id="wind-dir">-- °</span></div>
+                    <div class="weather-row"><strong>Tlak:</strong> <span id="pressure">-- hPa</span></div>
+                    <div class="weather-row"><strong>Vlhkost:</strong> <span id="humidity">-- %</span></div>
+                    <!--<div class="weather-row" id="tower-row"><strong>Odkaz věže:</strong> <a id="tower-link" href="https://tower.example.com/data">tower.example.com/data</a></div>-->
+                </div>
+            </div>
+        </div>
+    </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.8.0/suncalc.min.js"></script>
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+  AOS.init({offset:0});
+
+  // clock update
+  function updateTime() {
+    const now = new Date();
+    document.getElementById('current-time').textContent = now.toLocaleTimeString();
+    // recalc sunset every minute
+    const coords = {lat:49.2, lng:17.7}; // přibližné souřadnice Štípy
+    const sunTimes = SunCalc.getTimes(now, coords.lat, coords.lng);
+    document.getElementById('sunset').textContent = sunTimes.sunset.toLocaleTimeString();
+  }
+
+  setInterval(updateTime, 1000);
+  updateTime();
+
+  // static tower link; put actual URL here
+  const towerUrl = 'https://tower.example.com/data';
+  document.getElementById('tower-link').href = towerUrl;
+  document.getElementById('tower-link').textContent = towerUrl;
+
+  // placeholder: simulate receiving data from tower link
+  function fetchTowerData() {
+    // zde bude později volání API
+    // například:
+    // fetch('https://tower.example.com/data').then(r=>r.json()).then(updateWeather);
+  }
+  function updateWeather(data) {
+    document.getElementById('temperature').textContent = data.temp + ' °C';
+    document.getElementById('wind-speed').textContent = data.wind + ' km/h';
+    if(data.gust !== undefined) document.getElementById('wind-gust').textContent = data.gust + ' km/h';
+    if(data.direction !== undefined) document.getElementById('wind-dir').textContent = data.direction + ' °';
+    if(data.pressure !== undefined) document.getElementById('pressure').textContent = data.pressure + ' hPa';
+    if(data.humidity !== undefined) document.getElementById('humidity').textContent = data.humidity + ' %';
+    if(data.link) document.getElementById('tower-link').href = data.link;
+  }
+
+  // tower link is already set from the hardcoded value above
+</script></body>
+</html>
